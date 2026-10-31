@@ -11,11 +11,10 @@ Proyek simulasi jaringan komputer yang menghubungkan dua gedung kuliah Universit
 
 | Nama | NIM | Tugas |
 |---|---|---|
-| Muhammad Fayyadh Alghifari | 23210010 | Perancangan topologi dan pengalamatan IP |
-| Maulidzhan Syam Ikraam | 23210095 | Konfigurasi router dan routing |
-| Darmawansya | 23210080 | Konfigurasi switch, VLAN, dan link antargedung |
-| Rahmad Fadli | 23210129 | Konfigurasi wireless, server, dan keamanan jaringan |
-| Asmarudin | 23210133 | Pengujian dan dokumentasi |
+| Rahmad Fadli | 23210129 | Perancangan topologi dan pengalamatan IP |
+| Muhammad Fayyadh Alghifari | 23210010 | Konfigurasi router, routing, switch, VLAN, dan link antargedung |
+| Darmawansya | 23210080 | Konfigurasi router, routing, switch, VLAN, dan link antargedung |
+| Maulidzhan Syam Ikraam | 23210095 | Konfigurasi wireless, server, dan keamanan jaringan serta Pengujian dan dokumentasi |
 
 ## Latar Belakang
 
