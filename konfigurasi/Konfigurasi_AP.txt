@@ -1,0 +1,3 @@
+Perangkat	SSID	Keamanan	Passphrase	Enkripsi
+AP-A	UBBG-GedungA	WPA2-PSK	ubbg2026a	AES
+AP-B	UBBG-GedungB	WPA2-PSK	ubbg2026b	AES
