@@ -1,0 +1,71 @@
+enable
+configure terminal
+hostname SW-A
+no ip domain-lookup
+
+vlan 10
+ name LAB-A
+vlan 20
+ name WIFI-A
+vlan 30
+ name LAB-B
+vlan 40
+ name WIFI-B
+vlan 50
+ name SERVER-UBBG
+vlan 99
+ name MANAJEMEN
+exit
+
+interface gigabitEthernet0/1
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,40,50,99
+interface gigabitEthernet0/2
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,40,50,99
+
+interface fastEthernet0/1
+ switchport mode access
+ switchport access vlan 50
+interface fastEthernet0/2
+ switchport mode access
+ switchport access vlan 20
+interface range fastEthernet0/3 - 4
+ switchport mode access
+ switchport access vlan 10
+ switchport port-security
+ switchport port-security maximum 1
+ switchport port-security mac-address sticky
+ switchport port-security violation restrict
+interface fastEthernet0/5
+ switchport mode access
+ switchport access vlan 99
+
+interface range fastEthernet0/6 - 24
+ shutdown
+
+interface vlan 99
+ ip address 192.168.99.2 255.255.255.0
+ no shutdown
+exit
+ip default-gateway 192.168.99.1
+
+enable secret UBBG@2026
+service password-encryption
+username admin secret UBBG@2026
+ip domain-name ubbg.local
+crypto key generate rsa modulus 1024
+ip ssh version 2
+ip access-list standard MGMT-ONLY
+ permit 192.168.99.0 0.0.0.255
+line console 0
+ password UBBG@2026
+ login
+line vty 0 15
+ login local
+ transport input ssh
+ access-class MGMT-ONLY in
+end
+write memory
