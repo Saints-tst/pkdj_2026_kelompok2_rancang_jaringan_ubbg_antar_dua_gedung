@@ -1,0 +1,85 @@
+enable
+configure terminal
+hostname R-UBBG
+no ip domain-lookup
+
+interface gigabitEthernet0/0
+ no shutdown
+interface gigabitEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
+interface gigabitEthernet0/0.20
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
+interface gigabitEthernet0/0.30
+ encapsulation dot1Q 30
+ ip address 192.168.30.1 255.255.255.0
+interface gigabitEthernet0/0.40
+ encapsulation dot1Q 40
+ ip address 192.168.40.1 255.255.255.0
+interface gigabitEthernet0/0.50
+ encapsulation dot1Q 50
+ ip address 192.168.50.1 255.255.255.0
+interface gigabitEthernet0/0.99
+ encapsulation dot1Q 99 native
+ ip address 192.168.99.1 255.255.255.0
+exit
+
+ip dhcp excluded-address 192.168.10.1 192.168.10.10
+ip dhcp excluded-address 192.168.20.1 192.168.20.10
+ip dhcp excluded-address 192.168.30.1 192.168.30.10
+ip dhcp excluded-address 192.168.40.1 192.168.40.10
+
+ip dhcp pool VLAN10
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 192.168.50.10
+ip dhcp pool VLAN20
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+ dns-server 192.168.50.10
+ip dhcp pool VLAN30
+ network 192.168.30.0 255.255.255.0
+ default-router 192.168.30.1
+ dns-server 192.168.50.10
+ip dhcp pool VLAN40
+ network 192.168.40.0 255.255.255.0
+ default-router 192.168.40.1
+ dns-server 192.168.50.10
+exit
+
+ip access-list extended WIFI-TO-MGMT
+ deny ip 192.168.20.0 0.0.0.255 192.168.99.0 0.0.0.255
+ deny ip 192.168.40.0 0.0.0.255 192.168.99.0 0.0.0.255
+ permit ip any any
+interface gigabitEthernet0/0.20
+ ip access-group WIFI-TO-MGMT in
+interface gigabitEthernet0/0.40
+ ip access-group WIFI-TO-MGMT in
+
+ip access-list extended SERVER-PRIVAT
+ permit ip 192.168.10.0 0.0.0.255 192.168.50.0 0.0.0.255
+ permit ip 192.168.20.0 0.0.0.255 192.168.50.0 0.0.0.255
+ permit ip 192.168.30.0 0.0.0.255 192.168.50.0 0.0.0.255
+ permit ip 192.168.40.0 0.0.0.255 192.168.50.0 0.0.0.255
+ deny ip any any
+interface gigabitEthernet0/0.50
+ ip access-group SERVER-PRIVAT out
+
+enable secret UBBG@2026
+service password-encryption
+username admin secret UBBG@2026
+ip domain-name ubbg.local
+crypto key generate rsa modulus 1024
+ip ssh version 2
+ip access-list standard MGMT-ONLY
+ permit 192.168.99.0 0.0.0.255
+line console 0
+ password UBBG@2026
+ login
+line vty 0 4
+ login local
+ transport input ssh
+ access-class MGMT-ONLY in
+end
+write memory
